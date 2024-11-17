@@ -2,13 +2,30 @@ import pygame
 import constantes
 from personaje import Personaje
 pygame.init()
-
-jugador = Personaje(50, 50)
-
-
-
 ventana = pygame.display.set_mode((constantes.WIDTH_WINDOWS, constantes.HEIGHT_WINDOWS))
 pygame.display.set_caption("Consumo electrico")
+
+def escalar_img(image, scale):
+    w = image.get_width()
+    h = image.get_height()
+    nueva_imagen = pygame.transform.scale(
+        image,
+        (
+            int(w * scale),
+            int(h * scale)
+        )
+    )
+    return nueva_imagen
+
+
+animaciones = []
+for i in range(9):
+   img = pygame.image.load(f"assets/images/characters/player//player_{i}.png")
+   img= escalar_img(img, constantes.ESCALA_PERSONAJE)
+   animaciones.append(img)
+
+
+jugador = Personaje(50, 50, animaciones)
 
 #definir variables de movimiento del jugador
 mover_arriba= False
@@ -44,6 +61,8 @@ while run:
 
     # Metodo Movimiento
     jugador.movimiento(delta_x, delta_y)
+
+    jugador.update()
 
     # Metodo dibujar personaje
     jugador.draw(ventana)
